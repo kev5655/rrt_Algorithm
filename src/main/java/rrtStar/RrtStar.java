@@ -126,7 +126,6 @@ public class RrtStar {
         return connectetNodes;
     }
 
-    // https://www.matheretter.de/rechner/dreieckrw
     public Point generateNewPoint(Node nearestNode, Node newNode){
         //Node newNodeToZero = new Node(new Point())
         double xAbsolut =  newNode.getX() - nearestNode.getX();
