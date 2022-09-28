@@ -1,6 +1,6 @@
-package geometry;
+package gui.geometry;
 
-import dataClass.Obstacles;
+import gui.dataClass.Obstacles;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ public class Rectangle {
 
     private Line AB, AC, DB, DC;
     private Point A, B, C, D;
-    private int angle;
+    private Integer angle = null;
 
     public Rectangle(Line AB , Line AC, Line DB, Line DC, Integer angle){
         this.angle = angle;
@@ -100,6 +100,14 @@ public class Rectangle {
         return List.of(A, B, C, D);
     }
 
+    public List<Point> getP1AndP2() {
+        return List.of(A, B);
+    }
+
+    public List<Point> getP3AndP4() {
+        return List.of(C, D);
+    }
+
     public List<Point> getP2AndP4() { return List.of(B, D); }
 
     public List<Point> getP1AndP3() { return List.of(A, C); }
@@ -107,4 +115,7 @@ public class Rectangle {
     public Integer getAngle() {
         return angle;
     }
+
+
+
 }
