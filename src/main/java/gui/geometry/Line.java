@@ -1,6 +1,6 @@
 package gui.geometry;
 
-import rrtStar.Node;
+import rrt.Node;
 
 public class Line {
 
@@ -12,7 +12,7 @@ public class Line {
         this.p2 = p2;
     }
 
-    public Line(rrtStar.Point p1, rrtStar.Point p2){
+    public Line(rrt.Point p1, rrt.Point p2){
         this.p1 = new Point(p1.x, p1.y);
         this.p2 = new Point(p2.x, p2.y);
     }

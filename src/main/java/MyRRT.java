@@ -1,7 +1,9 @@
-import gui.dataClass.Data;
-import gui.dataClass.Obstacles;
+import gui.storage.Data;
+import gui.storage.Obstacles;
+import gui.drawer.Displayer;
+import gui.drawer.StationDrawer;
+import gui.drawer.GridDrawer;
 import gui.geometry.Point;
-import gui.obstaclePattern.FixStation;
 import gui.obstaclePattern.RandomStation;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -10,8 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import rrtStar.Node;
-import rrtStar.RrtStar;
+import rrt.Node;
+import rrt.Rrt;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +26,7 @@ public class MyRRT extends Application {
 
     double fieldWidth = Data.getFieldWidth();
     double fieldHeight = Data.getFieldHeight();
-    double field = Data.getField();
+    double field = Data.getFieldSize();
 
     Group allNodes;
 
@@ -46,18 +48,21 @@ public class MyRRT extends Application {
         primaryStage.setResizable(true);
         primaryStage.show();
 
-        Node startNode = new Node(new rrtStar.Point(50, 750));
-        Node goalNode = new Node(new rrtStar.Point(1350, 750));
-        RrtStar rrtStar = new RrtStar(startNode, goalNode, 20, 50, 10, 2000, allNodes);
+        Node startNode = new Node(new rrt.Point(50, 750));
+        Node goalNode = new Node(new rrt.Point(1350, 750));
+        Rrt rrtStar = new Rrt(startNode, goalNode, 4, 10, 0, 10000, allNodes);
 
         Thread pathPlaning = new Thread(()-> {
-            Platform.runLater(rrtStar::findPath);
+            rrtStar.findPath();
+            //Platform.runLater(rrtStar::findPath);
         });
 
         Platform.runLater(() -> {
-            showGrid();
-            //allNodes.getChildren().add(new RandomStation().getObstacle());
-            allNodes.getChildren().add(new FixStation().getObstacle());
+            new Displayer(new GridDrawer(fieldWidth, fieldHeight, field), allNodes).show();
+
+            //new Displayer(new ObstacleDrawer(new FixStation()), allNodes).show();
+            new Displayer(new StationDrawer(new RandomStation()), allNodes).show();
+
             //testLineInObstacle();
             pathPlaning.start();
         });

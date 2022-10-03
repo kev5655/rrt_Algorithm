@@ -1,7 +1,5 @@
 package gui.geometry;
 
-import gui.dataClass.Obstacles;
-
 import java.util.List;
 
 public class Rectangle {
@@ -51,7 +49,6 @@ public class Rectangle {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        Obstacles.addObstacle(this);
     }
 
     public void isValidRectangle() throws IllegalAccessException {

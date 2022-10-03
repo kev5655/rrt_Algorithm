@@ -1,4 +1,4 @@
-package rrtStar;
+package rrt;
 
 public class Env {
 

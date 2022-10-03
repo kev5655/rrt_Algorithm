@@ -1,4 +1,4 @@
-package gui.dataClass;
+package gui.storage;
 
 import gui.geometry.Line;
 import gui.geometry.Rectangle;

@@ -1,55 +1,54 @@
 package gui.drawer;
 
-import gui.dataClass.Obstacles;
 import gui.geometry.Rectangle;
 import gui.geometry.Point;
-import javafx.scene.Group;
+import gui.obstaclePattern.StationPattern;
 
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 import javafx.scene.text.Text;
+import utils.Converter;
 
 
 import java.util.LinkedList;
 import java.util.List;
 
 
-public class ObstacleDrawer {
+public class StationDrawer implements Drawable {
 
-    private Group obstacles = new Group();
-    private List<Color> rectangleCornerColors = new LinkedList<>(List.of(Color.RED, Color.BLUE, Color.GREEN, Color.BROWN));
+    private final List<Rectangle> rectangleList;
 
+    public StationDrawer(StationPattern stationPattern){
+        this.rectangleList = stationPattern.getRectangleList();
 
-    public ObstacleDrawer(){
-        List<Rectangle> rectangleList = Obstacles.getObstacleList();
+    }
+
+    @Override
+    public List<Node> draw() {
+        List<Node> obstaclesList = new LinkedList<>();
         List<Line> lines = new LinkedList<>();
         List<Line> points = new LinkedList<>();
         List<Text> texts = new LinkedList<>();
 
         for(Rectangle rectangle : rectangleList){
             for(gui.geometry.Line line :  rectangle.getLines()){
-                double x1 = line.getP1().getX();
-                double y1 = line.getP1().getY();
-                double x2 = line.getP2().getX();
-                double y2 = line.getP2().getY();
-                lines.add(getFxLine(x1, y1, x2, y2));
+                lines.add(Converter.geometryLineToFxLine(line));
             }
 
             if(rectangle.getAngle() != null){
                 // Winkel der Station
                 texts.add(getFxText(rectangle.getPoints(), rectangle.getAngle().toString()));
-
                 //IN Label der Station
                 texts.add(getFxText(rectangle.getP3AndP4(), "IN"));
-
                 //OUT Label der Station
                 texts.add(getFxText(rectangle.getP1AndP2(), "OUT"));
             }
 
-
             // Mark all Corner of Station
             for (int i = 0; i < rectangle.getPoints().size(); i++) {
+                List<Color> rectangleCornerColors = new LinkedList<>(List.of(Color.RED, Color.BLUE, Color.GREEN, Color.BROWN));
                 points.add(getCornerMarker(rectangle.getPoints().get(i), rectangleCornerColors.get(i)));
 
             }
@@ -60,16 +59,11 @@ public class ObstacleDrawer {
             texts.add(getCornerText(rectangle.getPoints().get(3), "p4 D"));
 
         }
+        obstaclesList.addAll(lines);
+        obstaclesList.addAll(points);
+        obstaclesList.addAll(texts);
 
-        obstacles.getChildren().addAll(lines);
-        obstacles.getChildren().addAll(points);
-        obstacles.getChildren().addAll(texts);
-    }
-
-    private Line getFxLine(double x1, double y1, double x2, double y2){
-        Line fxline = new Line(x1, y1, x2, y2);
-        fxline.setStroke(Color.BLACK);
-        return fxline;
+        return obstaclesList;
     }
 
     public Text getFxText(List<Point> points, String text){
@@ -95,11 +89,9 @@ public class ObstacleDrawer {
         fxPoint.setStrokeWidth(4);
         return fxPoint;
     }
+
     public Text getCornerText(Point p, String s){
         return new Text(p.getX(), p.getY(), s);
     }
 
-    public Group getObstacles() {
-        return obstacles;
-    }
 }

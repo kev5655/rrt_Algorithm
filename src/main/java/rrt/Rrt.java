@@ -1,16 +1,17 @@
-package rrtStar;
+package rrt;
 
 
-import gui.dataClass.Obstacles;
+import gui.storage.Obstacles;
 import gui.geometry.Line;
 import javafx.application.Platform;
 import javafx.scene.Group;
+import utils.Converter;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class RrtStar {
+public class Rrt {
 
     private double maxDistance; // For expanding Random Tree
     private double searchRadius; // For finding Neighborhoods only for RRT-Star
@@ -24,13 +25,13 @@ public class RrtStar {
     private List<Node> allNodes = new LinkedList<>();
     private Random rand = new Random();
 
-    Group group;
+    private Group group;
 
-    public RrtStar(double maxDistance){
+    public Rrt(double maxDistance){
         this.maxDistance = maxDistance;
     }
 
-    public RrtStar(Node startNode, Node goalNode, double goalOffset, double maxDistance, double searchRadius, int maxIteration, Group group){
+    public Rrt(Node startNode, Node goalNode, double goalOffset, double maxDistance, double searchRadius, int maxIteration, Group group){
         this.startNode = startNode;
         this.startNode.setCoast(0);
         this.actuallyNode = startNode;
@@ -61,12 +62,21 @@ public class RrtStar {
             allNodes.add(actuallyNode);
 
             updateGui(new Line(nearestNode, newNode));
+
+//            try {
+//                Thread.sleep(50);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
         }
     }
 
 
+
+
+
     public boolean isNotInGoal(Node actuallyNode){
-        // Bricht den While loop ab
+        // Bricht die While loop ab
         if(maxIteration <= actuallyIteration){
             System.out.println("\nKeine lösung gefunden iterationen: " + actuallyIteration);
             return false;
@@ -143,15 +153,15 @@ public class RrtStar {
         return new Point(x, y);
     }
 
-
     private boolean isObstacleBetweenNodes(Node nearestNode, Node actuallyNode) {
         Line line = new Line(nearestNode.getPoint(), actuallyNode.getPoint());
         return Obstacles.isLineInObstacle(line);
     }
 
     private void updateGui(Line line) {
-        javafx.scene.shape.Line fxLine = new javafx.scene.shape.Line(line.getP1().getX(), line.getP1().getY(), line.getP2().getX(), line.getP2().getY());
-        this.group.getChildren().add(fxLine);
+        Platform.runLater(() -> {
+            this.group.getChildren().add(Converter.geometryLineToFxLine(line));
+        });
     }
 
 }

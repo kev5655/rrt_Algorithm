@@ -1,10 +1,10 @@
-package gui.dataClass;
+package gui.storage;
 
 public class Data {
 
     private static double fieldWidth = 14000;
     private static double fieldHeight = 8000;
-    private static double field = 1000;
+    private static double fieldSize = 1000;
     private static double stationWidth = 700;
     private static double stationHeight = 350;
     private static int numberOfStation = 12;
@@ -22,8 +22,8 @@ public class Data {
         return fieldHeight / resizeFaktor;
     }
 
-    public static double getField() {
-        return field / resizeFaktor;
+    public static double getFieldSize() {
+        return fieldSize / resizeFaktor;
     }
 
     public static double getStationWidth() {
